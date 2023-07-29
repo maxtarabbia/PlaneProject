@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PlaneMovement : MonoBehaviour
@@ -7,9 +8,11 @@ public class PlaneMovement : MonoBehaviour
 
     PlaneTracker tracker;
     public float sens;
-    Vector3 velocity;
+    Vector3 velocity = new Vector3(0,0,0.5f);
     Vector3 RotInertia;
     public float DragCoefficient;
+
+    public TextMeshProUGUI textMeshProUGUI;
 
     public float yawCorrectionPower = 3f;
     public float PitchCorrectionPower = 10f;
@@ -23,12 +26,14 @@ public class PlaneMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+
+
+        textMeshProUGUI.text = ("Speed: " + velocity.magnitude.ToString("0.00"));
+
         DoPlaneRotation();
         DoPlaneMovement();
-
         DoAOACheck();
-
-        print("Vel = " + velocity.magnitude);
 
         tracker.UpdateCamPosition();
     }
@@ -38,7 +43,7 @@ public class PlaneMovement : MonoBehaviour
 
         
 
-        RotInertia += (inputRots * velocity.sqrMagnitude * 10f) * 0.05f;
+        RotInertia += 0.5f * velocity.magnitude * inputRots;
 
         RotInertia *= 1 - (Time.deltaTime);
 
@@ -53,7 +58,7 @@ public class PlaneMovement : MonoBehaviour
         }
         velocity = velocity * (1-(Time.deltaTime*velocity.sqrMagnitude * DragCoefficient));
 
-        velocity += Vector3.down * 0.05f * Time.deltaTime;
+        velocity += Vector3.down * 0.01f * Time.deltaTime;
         //print("Velocity: " + velocity);
         gameObject.transform.position += velocity;
     }
@@ -61,12 +66,15 @@ public class PlaneMovement : MonoBehaviour
     {
         Vector3 AOAalongAxis = Quaternion.Inverse(gameObject.transform.rotation) * velocity.normalized;
 
-        gameObject.transform.eulerAngles += new Vector3(-AOAalongAxis.y, AOAalongAxis.x, 0) * velocity.sqrMagnitude * Time.deltaTime * 10000f;
+        gameObject.transform.eulerAngles += new Vector3(-AOAalongAxis.y, AOAalongAxis.x, 0) * velocity.magnitude * Time.deltaTime * 50f;
+
+        textMeshProUGUI.text += "\nPressureStrength on Plane Rotation: " + (new Vector3(-AOAalongAxis.y, AOAalongAxis.x, 0).magnitude * velocity.magnitude *50f).ToString("0.0");
 
         float pressureStrength = (Mathf.Abs(AOAalongAxis.x) * yawCorrectionPower + Mathf.Abs(AOAalongAxis.y) * PitchCorrectionPower) *Time.deltaTime;
 
         velocity = Vector3.LerpUnclamped(velocity, (gameObject.transform.rotation * Vector3.forward) * velocity.magnitude,
             pressureStrength);
 
+        textMeshProUGUI.text += "\nPressureStrength on Velocity Vector: " + (pressureStrength / Time.deltaTime).ToString("0.0");
     }
 }
