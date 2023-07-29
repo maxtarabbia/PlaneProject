@@ -97,7 +97,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 8a48a0e9769fd5d4da6c35f411a7e23b,
+    type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -176,7 +177,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 20000
-  field of view: 80
+  field of view: 70
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -201,8 +202,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: 0.119357094, y: 0, z: 0, w: 0.99285144}
-  m_LocalPosition: {x: 0, y: 2.47, z: -8.68}
+  m_LocalRotation: {x: 0.043619387, y: 0, z: 0, w: 0.99904823}
+  m_LocalPosition: {x: 0, y: 1.76, z: -4.65}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -255,8 +256,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   planeGO: {fileID: 987914741}
-  CamOffset: {x: 0, y: 2.47, z: -8.68}
-  RotationOffset: {x: 13.71, y: 0, z: 0}
+  CamOffset: {x: 0, y: 1.76, z: -4.65}
+  RotationOffset: {x: 5, y: 0, z: 0}
+  CamFOVIncrease: 15
+  CamFOVAdditive: 0
+  isBoosting: 0
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -436,7 +440,7 @@ PrefabInstance:
     - target: {fileID: 1060584792771737081, guid: 7456fa936f78bd04fa90a8c959d53b32,
         type: 3}
       propertyPath: DragCoefficient
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1060584792771737081, guid: 7456fa936f78bd04fa90a8c959d53b32,
         type: 3}
@@ -955,6 +959,11 @@ PrefabInstance:
     - target: {fileID: 2075507043314134923, guid: bd620213da301e643b02b25c5b8b8a14,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7973948649521097686, guid: bd620213da301e643b02b25c5b8b8a14,
+        type: 3}
+      propertyPath: m_Convex
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

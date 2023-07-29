@@ -8,7 +8,7 @@ public class PlaneMovement : MonoBehaviour
 
     PlaneTracker tracker;
     public float sens;
-    Vector3 velocity = new Vector3(0,0,0.5f);
+    Vector3 velocity = new(0,0,0.5f);
     Vector3 RotInertia;
     public float DragCoefficient;
 
@@ -36,6 +36,7 @@ public class PlaneMovement : MonoBehaviour
         DoAOACheck();
 
         tracker.UpdateCamPosition();
+        tracker.CamFOVAdditive = velocity.magnitude * 20f;
     }
     public void DoPlaneRotation()
     {
@@ -55,10 +56,15 @@ public class PlaneMovement : MonoBehaviour
         if(Input.GetAxisRaw("Throttle") > 0.1)
         {
             velocity += gameObject.transform.rotation * Vector3.forward * Time.deltaTime * 0.1f;
+            tracker.isBoosting = true;
+        }
+        else
+        {
+            tracker.isBoosting = false;
         }
         velocity = velocity * (1-(Time.deltaTime*velocity.sqrMagnitude * DragCoefficient));
 
-        velocity += Vector3.down * 0.01f * Time.deltaTime;
+        velocity += Vector3.down * 0.03f * Time.deltaTime;
         //print("Velocity: " + velocity);
         gameObject.transform.position += velocity;
     }
