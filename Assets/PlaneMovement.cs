@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlaneMovement : MonoBehaviour
 {
 
     PlaneTracker tracker;
     public float sens;
-    Vector3 velocity = new(0,0,0.5f);
+    Vector3 velocity = new(0,0,0.3f);
     Vector3 RotInertia;
     public float DragCoefficient;
 
@@ -51,6 +52,10 @@ public class PlaneMovement : MonoBehaviour
         gameObject.transform.rotation = gameObject.transform.rotation * Quaternion.Euler(RotInertia);
 
     }
+    public void UpdateDrag()
+    {
+        DragCoefficient = GameObject.Find("DragSlider").GetComponent<Slider>().value;
+    }
     public void DoPlaneMovement()
     {
         if(Input.GetAxisRaw("Throttle") > 0.1)
@@ -64,7 +69,7 @@ public class PlaneMovement : MonoBehaviour
         }
         velocity = velocity * (1-(Time.deltaTime*velocity.sqrMagnitude * DragCoefficient));
 
-        velocity += Vector3.down * 0.03f * Time.deltaTime;
+        velocity += Vector3.down * 0.1f * Time.deltaTime;
         //print("Velocity: " + velocity);
         gameObject.transform.position += velocity;
     }
@@ -72,9 +77,11 @@ public class PlaneMovement : MonoBehaviour
     {
         Vector3 AOAalongAxis = Quaternion.Inverse(gameObject.transform.rotation) * velocity.normalized;
 
-        gameObject.transform.eulerAngles += new Vector3(-AOAalongAxis.y, AOAalongAxis.x, 0) * velocity.magnitude * Time.deltaTime * 50f;
+        RotInertia += new Vector3(-AOAalongAxis.y, AOAalongAxis.x, 0) * Time.deltaTime * 0.5f; 
 
-        textMeshProUGUI.text += "\nPressureStrength on Plane Rotation: " + (new Vector3(-AOAalongAxis.y, AOAalongAxis.x, 0).magnitude * velocity.magnitude *50f).ToString("0.0");
+        //gameObject.transform.eulerAngles += new Vector3(-AOAalongAxis.y, AOAalongAxis.x, 0) * velocity.magnitude * Time.deltaTime * 100f;
+
+        textMeshProUGUI.text += "\nPressureStrength on Plane Rotation: " + (new Vector3(-AOAalongAxis.y, AOAalongAxis.x, 0).magnitude * velocity.magnitude *100f).ToString("0.0");
 
         float pressureStrength = (Mathf.Abs(AOAalongAxis.x) * yawCorrectionPower + Mathf.Abs(AOAalongAxis.y) * PitchCorrectionPower) *Time.deltaTime;
 
