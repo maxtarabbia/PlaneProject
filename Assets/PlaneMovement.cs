@@ -21,7 +21,9 @@ public class PlaneMovement : MonoBehaviour
     ParticleSystem PS;
     public bool Throttle = false;
 
-    float BonkResetTimer = 1; 
+    float BonkResetTimer = 1;
+
+    public Material trailmat;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,6 +32,10 @@ public class PlaneMovement : MonoBehaviour
     }
     private void Update()
     {
+        float speed = RB.velocity.magnitude-5f;
+        speed = speed * speed * 0.0002f;
+        Color trailcol = new(1, 1, 1,Mathf.Clamp01(speed) * 0.5f);
+        trailmat.SetColor("_BaseColor", trailcol);
         BonkResetTimer += Time.deltaTime;
     }
 
@@ -47,7 +53,7 @@ public class PlaneMovement : MonoBehaviour
     {
         Vector3 inputRots = new Vector3(Input.GetAxisRaw("Vertical"), Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Roll")) * sens;
 
-        RB.AddRelativeTorque(inputRots * (RB.velocity.magnitude + 1f), ForceMode.Force);
+        RB.AddRelativeTorque(inputRots * (RB.velocity.magnitude + 5f), ForceMode.Force);
 
         /*
         RotInertia += 0.5f * velocity.magnitude * inputRots;
@@ -63,7 +69,7 @@ public class PlaneMovement : MonoBehaviour
     }
     public void DoPlaneMovement()
     {
-        if (Input.GetAxisRaw("Throttle") > 0.1 && BonkResetTimer > 1)
+        if (Input.GetAxisRaw("Throttle") > 0.1)
         {
             RB.AddRelativeForce(Vector3.forward * Thrust);
             Throttle = true;
@@ -95,13 +101,13 @@ public class PlaneMovement : MonoBehaviour
     {
         Vector3 AOAalongAxis = Quaternion.Inverse(gameObject.transform.rotation) * RB.velocity.normalized * RB.velocity.magnitude/50f;
 
-        RB.AddRelativeTorque(new Vector3(-AOAalongAxis.y, AOAalongAxis.x, 0) * Mathf.Clamp01(BonkResetTimer)); 
+        RB.AddRelativeTorque(new Vector3(-AOAalongAxis.y, AOAalongAxis.x, 0) * Mathf.Clamp01(BonkResetTimer*BonkResetTimer)); 
 
         //gameObject.transform.eulerAngles += new Vector3(-AOAalongAxis.y, AOAalongAxis.x, 0) * velocity.magnitude * Time.deltaTime * 100f;
 
         textMeshProUGUI.text += "\nPressureStrength on Plane Rotation: " + (new Vector3(-AOAalongAxis.y, AOAalongAxis.x, 0).magnitude *100f).ToString("0.0");
 
-        float pressureStrength = (Mathf.Abs(AOAalongAxis.x) * yawCorrectionPower + Mathf.Abs(AOAalongAxis.y) * PitchCorrectionPower) * Mathf.Clamp01(BonkResetTimer);
+        float pressureStrength = (Mathf.Abs(AOAalongAxis.x) * yawCorrectionPower + Mathf.Abs(AOAalongAxis.y) * PitchCorrectionPower) * Mathf.Clamp01(BonkResetTimer * BonkResetTimer);
 
         RB.velocity = Vector3.LerpUnclamped(RB.velocity, (gameObject.transform.rotation * Vector3.forward) * RB.velocity.magnitude,
             pressureStrength);

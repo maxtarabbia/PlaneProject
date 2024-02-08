@@ -64,7 +64,7 @@ public class BetterPlaneTracker : MonoBehaviour
         else
             magnitude = offset.magnitude * 0.9f + TargetDist * 0.1f;
 
-        //print(magnitude);
+        print(magnitude);
 
         Vector3 newposition = planeGO.transform.position + (offset.normalized * magnitude);
 
