@@ -7,11 +7,11 @@ using UnityEngine.UI;
 public class PlaneMovement : MonoBehaviour
 {
 
-    PlaneTracker tracker;
     public float sens;
-    Vector3 velocity = new(0,0,0.3f);
-    Vector3 RotInertia;
+    public float Thrust;
     public float DragCoefficient;
+
+    Rigidbody RB;
 
     public TextMeshProUGUI textMeshProUGUI;
 
@@ -21,7 +21,7 @@ public class PlaneMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        tracker = FindObjectOfType<PlaneTracker>();
+        RB = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -30,27 +30,25 @@ public class PlaneMovement : MonoBehaviour
 
 
 
-        textMeshProUGUI.text = ("Speed: " + velocity.magnitude.ToString("0.00"));
+        textMeshProUGUI.text = ("Speed: " + RB.velocity.magnitude.ToString("0.00"));
 
         DoPlaneRotation();
         DoPlaneMovement();
         DoAOACheck();
-
-        tracker.UpdateCamPosition();
-        tracker.CamFOVAdditive = velocity.magnitude * 20f;
     }
     public void DoPlaneRotation()
     {
-        Vector3 inputRots = new Vector3(Input.GetAxisRaw("Vertical"), Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Roll")) * sens * Time.deltaTime;
+        Vector3 inputRots = new Vector3(Input.GetAxisRaw("Vertical"), Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Roll")) * sens;
 
-        
+        RB.AddRelativeTorque(inputRots * (RB.velocity.magnitude + 1f), ForceMode.Force);
 
+        /*
         RotInertia += 0.5f * velocity.magnitude * inputRots;
 
         RotInertia *= 1 - (Time.deltaTime);
 
         gameObject.transform.rotation = gameObject.transform.rotation * Quaternion.Euler(RotInertia);
-
+        */
     }
     public void UpdateDrag()
     {
@@ -58,34 +56,37 @@ public class PlaneMovement : MonoBehaviour
     }
     public void DoPlaneMovement()
     {
-        if(Input.GetAxisRaw("Throttle") > 0.1)
+        if (Input.GetAxisRaw("Throttle") > 0.1)
         {
-            velocity += gameObject.transform.rotation * Vector3.forward * Time.deltaTime * 0.1f;
-            tracker.isBoosting = true;
+            RB.AddRelativeForce(Vector3.forward * Thrust);
         }
-        else
-        {
-            tracker.isBoosting = false;
-        }
-        velocity = velocity * (1-(Time.deltaTime*velocity.sqrMagnitude * DragCoefficient));
 
-        velocity += Vector3.down * 0.1f * Time.deltaTime;
-        //print("Velocity: " + velocity);
-        gameObject.transform.position += velocity;
+
+        //Ground Check
+        if (gameObject.transform.position.y <= -50 && RB.velocity.y < 0)
+        {
+            RB.velocity = new Vector3(RB.velocity.x, RB.velocity.y * -1, RB.velocity.z);
+            RB.velocity *= 0.9f;
+        }
+
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        print("Hit Obj");
     }
     public void DoAOACheck()
     {
-        Vector3 AOAalongAxis = Quaternion.Inverse(gameObject.transform.rotation) * velocity.normalized;
+        Vector3 AOAalongAxis = Quaternion.Inverse(gameObject.transform.rotation) * RB.velocity.normalized;
 
-        RotInertia += new Vector3(-AOAalongAxis.y, AOAalongAxis.x, 0) * Time.deltaTime * 0.5f; 
+        RB.AddRelativeTorque(new Vector3(-AOAalongAxis.y, AOAalongAxis.x, 0) * 1f); 
 
         //gameObject.transform.eulerAngles += new Vector3(-AOAalongAxis.y, AOAalongAxis.x, 0) * velocity.magnitude * Time.deltaTime * 100f;
 
-        textMeshProUGUI.text += "\nPressureStrength on Plane Rotation: " + (new Vector3(-AOAalongAxis.y, AOAalongAxis.x, 0).magnitude * velocity.magnitude *100f).ToString("0.0");
+        textMeshProUGUI.text += "\nPressureStrength on Plane Rotation: " + (new Vector3(-AOAalongAxis.y, AOAalongAxis.x, 0).magnitude * RB.velocity.magnitude *100f).ToString("0.0");
 
         float pressureStrength = (Mathf.Abs(AOAalongAxis.x) * yawCorrectionPower + Mathf.Abs(AOAalongAxis.y) * PitchCorrectionPower) *Time.deltaTime;
 
-        velocity = Vector3.LerpUnclamped(velocity, (gameObject.transform.rotation * Vector3.forward) * velocity.magnitude,
+        RB.velocity = Vector3.LerpUnclamped(RB.velocity, (gameObject.transform.rotation * Vector3.forward) * RB.velocity.magnitude,
             pressureStrength);
 
         textMeshProUGUI.text += "\nPressureStrength on Velocity Vector: " + (pressureStrength / Time.deltaTime).ToString("0.0");

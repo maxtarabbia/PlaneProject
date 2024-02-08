@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(PlaneTracker))]
-public class PlaneTrackereditor : Editor
+[CustomEditor(typeof(BetterPlaneTracker))]
+public class BetterPlaneTrackereditor : Editor
 {
     public override void OnInspectorGUI()
     {
 
-        PlaneTracker Planetracker = (PlaneTracker)target;
+        BetterPlaneTracker BetterPlaneTracker = (BetterPlaneTracker)target;
 
 
         if (DrawDefaultInspector())
-            Planetracker.UpdateCamPosition();
+            BetterPlaneTracker.UpdateCam();
 
         if (GUILayout.Button("Update"))
         {
-            Planetracker.UpdateCamPosition();
+            BetterPlaneTracker.UpdateCam();
         }
     }
 }

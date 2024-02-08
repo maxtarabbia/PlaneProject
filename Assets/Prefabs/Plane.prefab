@@ -203,8 +203,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2791368916998467586}
-  - component: {fileID: 1060584792771737081}
   - component: {fileID: 2462956342306354138}
+  - component: {fileID: 1060584792771737081}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -231,22 +231,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1060584792771737081
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6953706269594589001}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9fa66407748f52469dc5898fb922d88, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sens: 20
-  DragCoefficient: 10
-  yawCorrectionPower: 3
-  PitchCorrectionPower: 10
 --- !u!65 &2462956342306354138
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -260,6 +244,24 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 3.3580885, y: 1.3244593, z: 3.02}
   m_Center: {x: 0.0065603256, y: 0.17713356, z: 0}
+--- !u!114 &1060584792771737081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6953706269594589001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9fa66407748f52469dc5898fb922d88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sens: 20
+  Thrust: 0
+  DragCoefficient: 10
+  textMeshProUGUI: {fileID: 0}
+  yawCorrectionPower: 3
+  PitchCorrectionPower: 10
 --- !u!1 &7661151956071409870
 GameObject:
   m_ObjectHideFlags: 0
