@@ -644,12 +644,12 @@ PrefabInstance:
     - target: {fileID: 1060584792771737081, guid: 7456fa936f78bd04fa90a8c959d53b32,
         type: 3}
       propertyPath: sens
-      value: 0.05
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 1060584792771737081, guid: 7456fa936f78bd04fa90a8c959d53b32,
         type: 3}
       propertyPath: Thrust
-      value: 2
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1060584792771737081, guid: 7456fa936f78bd04fa90a8c959d53b32,
         type: 3}
@@ -758,12 +758,12 @@ PrefabInstance:
     - target: {fileID: 2791368916998467586, guid: 7456fa936f78bd04fa90a8c959d53b32,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.9948983
       objectReference: {fileID: 0}
     - target: {fileID: 2791368916998467586, guid: 7456fa936f78bd04fa90a8c959d53b32,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: 0.10088261
       objectReference: {fileID: 0}
     - target: {fileID: 2791368916998467586, guid: 7456fa936f78bd04fa90a8c959d53b32,
         type: 3}
@@ -778,7 +778,7 @@ PrefabInstance:
     - target: {fileID: 2791368916998467586, guid: 7456fa936f78bd04fa90a8c959d53b32,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: 11.58
       objectReference: {fileID: 0}
     - target: {fileID: 2791368916998467586, guid: 7456fa936f78bd04fa90a8c959d53b32,
         type: 3}
@@ -794,6 +794,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Plane
+      objectReference: {fileID: 0}
+    - target: {fileID: 7663439380505285423, guid: 7456fa936f78bd04fa90a8c959d53b32,
+        type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 10000
+      objectReference: {fileID: 0}
+    - target: {fileID: 7663439380505285423, guid: 7456fa936f78bd04fa90a8c959d53b32,
+        type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 303.37
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 0}
