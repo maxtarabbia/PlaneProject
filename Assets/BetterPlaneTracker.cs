@@ -38,7 +38,7 @@ public class BetterPlaneTracker : MonoBehaviour
     private void FixedUpdate()
     {
         Vector3 offset = -planeGO.transform.position + gameObject.transform.position;
-        textMeshProUGUI.text += "\nCamera Distance: " + offset.magnitude.ToString("0.0");
+        textMeshProUGUI.text += "\nCamera Distance: " + offset.magnitude.ToString("0.00");
     }
 
     public float LinToSph(float i)
@@ -49,6 +49,7 @@ public class BetterPlaneTracker : MonoBehaviour
 
     public void UpdateCam()
     {   
+
         //Check Plane
         if(planeGO == null)
         {
@@ -71,7 +72,7 @@ public class BetterPlaneTracker : MonoBehaviour
         else
             magnitude = offset.magnitude * 0.9f + TargetDist * 0.1f;
 
-        print(magnitude);
+        //print(magnitude);
 
         Vector3 newposition = planeGO.transform.position + (offset.normalized * magnitude);
 

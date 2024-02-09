@@ -759,12 +759,12 @@ PrefabInstance:
     - target: {fileID: 2791368916998467586, guid: 7456fa936f78bd04fa90a8c959d53b32,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9948983
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2791368916998467586, guid: 7456fa936f78bd04fa90a8c959d53b32,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.10088261
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2791368916998467586, guid: 7456fa936f78bd04fa90a8c959d53b32,
         type: 3}
@@ -779,7 +779,7 @@ PrefabInstance:
     - target: {fileID: 2791368916998467586, guid: 7456fa936f78bd04fa90a8c959d53b32,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 11.58
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2791368916998467586, guid: 7456fa936f78bd04fa90a8c959d53b32,
         type: 3}
@@ -826,7 +826,7 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0.05
   m_AngularDrag: 2
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 0

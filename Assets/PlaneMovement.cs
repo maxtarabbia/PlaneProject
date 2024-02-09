@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using TMPro;
 using UnityEngine.UI;
 
 public class PlaneMovement : MonoBehaviour
@@ -51,9 +49,11 @@ public class PlaneMovement : MonoBehaviour
     }
     public void DoPlaneRotation()
     {
-        Vector3 inputRots = new Vector3(Input.GetAxisRaw("Vertical"), Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Roll")) * sens;
+        Vector3 inputRots = new Vector3(Input.GetAxisRaw("Vertical"), Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Roll")* 0.5f) * sens;
 
-        RB.AddRelativeTorque(inputRots * (RB.velocity.magnitude + 5f), ForceMode.Force);
+        float tvc = (Throttle ? 1 : 0) * 20f;
+
+        RB.AddRelativeTorque(inputRots * (RB.velocity.magnitude + tvc), ForceMode.Force);
 
         /*
         RotInertia += 0.5f * velocity.magnitude * inputRots;
@@ -84,17 +84,21 @@ public class PlaneMovement : MonoBehaviour
         else if(!Throttle && PS.isPlaying)
             PS.Stop();
 
+        RB.AddForce(Vector3.down * Time.fixedDeltaTime * 20, ForceMode.Acceleration);
+
         //Ground Check
-        if (gameObject.transform.position.y <= -50 && RB.velocity.y < 0)
+        /*if (gameObject.transform.position.y <= -50 && RB.velocity.y < 0)
         {
             RB.velocity = new Vector3(RB.velocity.x, RB.velocity.y * -1, RB.velocity.z);
             RB.velocity *= 0.9f;
         }
+        */
 
     }
     private void OnCollisionEnter(Collision collision)
     {
         BonkResetTimer = 0;
+        RB.velocity *= 0.9f;
         print("Hit Obj at " + RB.velocity.magnitude);
     }
     public void DoAOACheck()
@@ -107,11 +111,11 @@ public class PlaneMovement : MonoBehaviour
 
         textMeshProUGUI.text += "\nPressureStrength on Plane Rotation: " + (new Vector3(-AOAalongAxis.y, AOAalongAxis.x, 0).magnitude *100f).ToString("0.0");
 
-        float pressureStrength = (Mathf.Abs(AOAalongAxis.x) * yawCorrectionPower + Mathf.Abs(AOAalongAxis.y) * PitchCorrectionPower) * Mathf.Clamp01(BonkResetTimer * BonkResetTimer);
+        float pressureStrength = (Mathf.Abs(AOAalongAxis.x) * yawCorrectionPower + Mathf.Abs(AOAalongAxis.y) * PitchCorrectionPower) * Mathf.Clamp01(BonkResetTimer * BonkResetTimer) * 0.01f;
 
         RB.velocity = Vector3.LerpUnclamped(RB.velocity, (gameObject.transform.rotation * Vector3.forward) * RB.velocity.magnitude,
             pressureStrength);
 
-        textMeshProUGUI.text += "\nPressureStrength on Velocity Vector: " + (pressureStrength / Time.deltaTime).ToString("0.0");
+        textMeshProUGUI.text += "\nPressureStrength on Velocity Vector: " + (pressureStrength/Time.fixedDeltaTime).ToString("0.0");
     }
 }
