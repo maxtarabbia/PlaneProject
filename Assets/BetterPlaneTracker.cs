@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class BetterPlaneTracker : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class BetterPlaneTracker : MonoBehaviour
     public float TargetDist = 10f;
     public float DistVariance = 5f;
     public Vector3 velocity;
+
+    public TextMeshProUGUI textMeshProUGUI;
     // Start is called before the first frame update
     void Start()
     {
@@ -32,7 +35,11 @@ public class BetterPlaneTracker : MonoBehaviour
            
         }
     }
-
+    private void FixedUpdate()
+    {
+        Vector3 offset = -planeGO.transform.position + gameObject.transform.position;
+        textMeshProUGUI.text += "\nCamera Distance: " + offset.magnitude.ToString("0.0");
+    }
 
     public float LinToSph(float i)
     {
